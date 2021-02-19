@@ -11,19 +11,18 @@ class Node:
 
     def set_next(self, next):
         self.next = next
-    
-    def has_next(self):
-        return self.next != None
 
-class LinkedList:
+class LL: # Linked List
     def __init__(self, data=None):
-        self.head = Node(data)
-        self.size = 1
-    
-    def len(self):
+        if data:
+            self.head = Node(data)
+        else:
+            self.head = None
+
+    def size(self):
         n, c = self.head, 0 
         while n:
-            n,c = n.get_next(), c+1
+            n, c = n.get_next(), c+1
         return c
 
     def search(self, data):
@@ -35,91 +34,119 @@ class LinkedList:
         return -1
 
     def print(self): # traversing
-        print('--- SLL ---')
+        if self.head == None:
+            print('+++ SLL is empty +++')
+            return
+        print('+++ SLL +++')
         n = self.head
         while n != None:
-            print (n.get_data(), end= ' ')
+            print(n.get_data(), end=' ')
             n = n.get_next()
-        print()
+        print('\n')
+
+    def insert_at_beginig(self, data):
+        new = Node(data)
+        new.set_next(self.head) # even if head is None it is Ok
+        self.head = new
+        return
+
+    def insert_at_middle(self, pos, data):
+        node, i = self.head, 0
+        while i != pos - 1: 
+            node, i = node.get_next(), i+1
+        new = Node(data)
+        new.set_next(node.get_next())
+        node.set_next(new)
+        return
+
+    def insert_at_end(self, data):
+        node = self.head
+        while node.get_next() != None:
+            node = node.get_next()
+        new = Node(data)
+        node.set_next(new)
 
     def insert(self, pos, data):
-        if pos < 0 or pos > self.size+1 or (pos > 0 and self.size == 0):
+        size = self.size()
+        if pos < 0 or pos > size:
             return None
         if pos == 0:
-            new = Node(data, self.head)
-            self.head = new
-            self.size += 1
+            self.insert_at_beginig(data)
+        elif pos == size:
+            self.insert_at_end(data)
         else:
-            current = self.head
-            count = 1
-            while current.has_next(): 
-                if count == pos:
-                    new = Node(data, current.get_next())
-                    current.set_next(new)
-                    self.size += 1
-                    return
-                else:
-                    current = current.get_next()
-                count += 1
-            if count <= pos : 
-                new = Node(data, None)
-                current.set_next(new)
-                self.size += 1
+            self.insert_at_middle(pos, data)
+            
+    def delete_from_begining(self):
+        self.head = self.head.get_next()
+
+    def delete_from_end(self):
+        previous, current = self.head, self.head
+        while current.get_next() != None:
+            previous, current = current, current.get_next()
+        previous.set_next(None)
+
+    def delete_from_middle(self, pos):
+        previous, current, i = self.head, self.head, 0
+        while i != pos - 1:
+            previous, current, i = current, current.get_next(), i+1
+        previous.set_next(current.get_next())
 
     def delete(self, pos):
-        if pos < 0 or pos > self.size:
+        size = self.size()
+        if pos < 0 or pos > size or size == 0:
             return None
-        if self.size == 0:
-            print("The linked list is empty")
-            print('::', self.len())
-            return
         if pos == 0:
-            self.head = self.head.get_next()
-            self.size -= 1
+            self.delete_from_begining()
+        elif pos == size:
+            self.delete_from_end()
         else:
-            prev, curr, i = self.head, self.head, 0
-            while curr.has_next() and i < pos:
-                prev, curr,i  = curr, curr.get_next(), i+1
-            if curr.has_next():
-                prev.set_next(curr.get_next())
-                self.size -= 1
-            else:
-                prev.set_next(None)
-                self.size -= 1
-
-def init():
-    i,j = 0,1
-    ll = LinkedList(j)
-
-    for _ in range(5):
-        i, j = i+1, j*10
-        ll.insert(i,j)
-    
-    ll.print()
-    return ll
-
-def insertion(ll):
+            self.delete_from_middle(pos)
+            
+def insert_into_ll(ll):
     ll.print()
 
-    d = 22; p = 2; print (f'insert data {d} into pos {p}');ll.insert(p, d); ll.print()
+    d = 111
+    p = 1
+    print (f'insert data {d} into pos {p} # no change, ll empty, ')
+    ll.insert(p, d); 
+    ll.print()
     
-    d = 99; p = ll.len()+1; print (f'insert data {d} into pos {p}');ll.insert(p, d); ll.print()
+    d = 222
+    p = 0
+    print (f'insert data {d} into pos {p} # begining')
+    ll.insert(p, d)
+    ll.print()
+
+    d = 333
+    p = ll.size() ; 
+    print (f'insert data {d} into pos {p} # end');
+    ll.insert(p, d)
+    ll.print()
     
-    d = 555; p = 0; print (f'insert data {d} into pos {p}');ll.insert(p, d); ll.print()
+    for p in range(1, 5):
+        d = 10**p
+        print (f'insert data {d} into pos {p} # end');
+        ll.insert(p, d)
+        ll.print()
 
     return ll
 
-def deletion(ll):
-    print ('delete last')
-    ll.delete(ll.len())
-    ll.print ()
-
-    print ('delete 4th')
-    ll.delete(4)
-    ll.print ()
-
-    print ('delete 0th')
+def deletion_from_ll(ll):
+    print ('delete first')
     ll.delete(0)
+    ll.print ()
+
+    print ('delete last')
+    ll.delete(ll.size())
+    ll.print ()
+
+    print ('delete 2nd')
+    ll.delete(2)
+    ll.print ()
+
+    print ('delete 2nd')
+    ll.delete(2)
     ll.print ()
     return ll
 
@@ -131,15 +158,21 @@ def search (n, ll):
     else:
         print (f'{n} in ll at pos {ans}')
 
+def search_in_ll(ll):
+    print ('--- search in ')
+    n = 5; search (n, ll)
+    n = 10; search (n, ll)
+    n = 100000; search (n, ll)
 
 def over_deletion(ll):
     print ('delete 0th n times')
-    for _ in range(ll.size + 1):
+    for _ in range(ll.size() + 3):
         ll.print()
-        ll.delete(0); print (ll.size)
+        ll.delete(0)
     return ll
 
 def insert_into_empty_ll(ll):
+    print ('--- insert_into_empty_ll ---')
     i, j = -2,1
     for _ in range(5):
         ll.insert(i,j)
@@ -147,18 +180,12 @@ def insert_into_empty_ll(ll):
     ll.print ()
 
 def main():
-    ll = init()
-    
-    ll = insertion(ll)
+    ll = LL()
 
-    ll = deletion(ll)
-
-    n = 5; search (n, ll)
-    n = 10; search (n, ll)
-    n = 100000; search (n, ll)
-    
-    ll = over_deletion(ll)
-
-    ll = insert_into_empty_ll(ll)
+    insert_into_ll(ll)
+    deletion_from_ll(ll)
+    search_in_ll(ll)
+    over_deletion(ll)
+    insert_into_empty_ll(ll)
 
 main()
