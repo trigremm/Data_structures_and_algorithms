@@ -32,8 +32,11 @@ class Stack(object):
         return self.index
     
     def resize(self):
-        self.stack += [None] * self.limit
-        self.limit= 2 * self.limit 
+        self.limit = 2 * self.limit
+        new_stack = [None] * self.limit
+        for i_, i in enumerate(self.stack):
+            new_stack[i_] = i
+        self.stack = new_stack
     
     def pprint(self):
         print('pprint:', self.stack[:self.index])
