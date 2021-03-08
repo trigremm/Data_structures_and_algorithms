@@ -2,6 +2,7 @@
 bst binary search tree
 '''
 from icecream import ic
+from random import randint
 
 class Node:
     def __init__(self, data):
@@ -104,6 +105,43 @@ class Tree:
             else:
                 parent_of_leftmost_node.right_child = leftmost_node.right_child
 
+    def preorder(self, root_node):
+        current = root_node
+        if current is None:
+            return
+        print(current.data)
+        self.preorder(current.left_child)
+        self.preorder(current.right_child)
+    def postorder(self, root_node):
+        current = root_node
+        if current is None:
+            return
+        self.postorder(current.left_child)
+        self.postorder(current.right_child)
+        print(current.data)
+COUNT = [10] 
+def print2DUtil(root, space = 0) : 
+  
+    # Base case  
+    if (root == None) : 
+        return
+  
+    # Increase distance between levels  
+    space += COUNT[0] 
+  
+    # Process right child first  
+    print2DUtil(root.right_child, space)  
+  
+    # Print current node after space  
+    # count  
+    print()  
+    for i in range(COUNT[0], space): 
+        print(end = " ")  
+    print(root.data)  
+  
+    # Process left child  
+    print2DUtil(root.left_child, space) 
+
 def nodes():
     n1 = Node("root node")
     n2 = Node("left child node")
@@ -118,7 +156,28 @@ def nodes():
     while current:
         print(current.data)
         current = current.left_child
-def trees():
+
+def getVerticalOrder(root, hd, m):
+    if root is None:
+        return
+    try:
+        m[hd].append(root.data)
+    except:
+        m[hd] = [root.data]
+    getVerticalOrder(root.left_child, hd-1, m)
+    getVerticalOrder(root.right_child, hd+1, m)
+ 
+
+def printVerticalOrder(root):
+    m = dict()
+    hd = 0
+    getVerticalOrder(root, hd, m)
+    for index, value in enumerate(sorted(m)):
+        for i in m[value]:
+            print (i, end=' ')
+        print()
+
+def trees_example_1():
     t = Tree()
     t.insert(10)
     t.insert(5)
@@ -137,9 +196,25 @@ def trees():
     print (t.root_node.left_child.data)
     print (t.root_node.left_child.left_child.data)
 
+def trees_example_2():
+    t = Tree()
+    for _ in range(10):
+        r = randint(1, 100)
+        t.insert(r)
+    print ('preorder')
+    t.preorder(t.root_node)
+    print ('postorder')
+    t.postorder(t.root_node)
+    print ('---')
+    printVerticalOrder(t.root_node)
+    print ('---')
+    print2DUtil(t.root_node)
+
 def main():
     nodes()
-    trees()
+    trees_example_1()
+    trees_example_2()
+    
 
 if __name__ == '__main__':
     main()
