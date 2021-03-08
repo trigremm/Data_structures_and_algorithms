@@ -142,6 +142,7 @@ def print2DUtil(root, space = 0) :
     # Process left child  
     print2DUtil(root.left_child, space) 
 
+
 def nodes():
     n1 = Node("root node")
     n2 = Node("left child node")
