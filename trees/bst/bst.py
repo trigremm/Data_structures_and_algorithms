@@ -1,5 +1,5 @@
 '''
-bst binary search tree
+bst - binary search tree
 '''
 from icecream import ic
 from random import randint
@@ -9,7 +9,6 @@ class Node:
         self.data = data
         self.right_child = None
         self.left_child = None
-
 
 class Tree:
     def __init__(self):
@@ -22,7 +21,6 @@ class Tree:
         return current
 
     def insert(self, data):
-        ic (data)
         node = Node(data)
         if self.root_node is None:
             self.root_node = node
@@ -32,18 +30,14 @@ class Tree:
         while True:
             parent = current
             if node.data < current.data:
-                ic('left')
                 current = current.left_child
                 if current is None:
                     parent.left_child = node
-                    ic('left assign')
                     return
             else: 
-                ic('right')
                 current = current.right_child
                 if current is None:
                     parent.right_child = node
-                    ic('right assign')
                     return
     
     def get_node_with_parent(self, data):
@@ -119,29 +113,22 @@ class Tree:
         self.postorder(current.left_child)
         self.postorder(current.right_child)
         print(current.data)
-COUNT = [10] 
-def print2DUtil(root, space = 0) : 
-  
-    # Base case  
-    if (root == None) : 
-        return
-  
-    # Increase distance between levels  
-    space += COUNT[0] 
-  
-    # Process right child first  
-    print2DUtil(root.right_child, space)  
-  
-    # Print current node after space  
-    # count  
-    print()  
-    for i in range(COUNT[0], space): 
-        print(end = " ")  
-    print(root.data)  
-  
-    # Process left child  
-    print2DUtil(root.left_child, space) 
 
+    def print2D(self):
+        print ('-'*40)
+        self.print2D_node(self.root_node)
+        print ('-'*40)
+
+    def print2D_node(self, root, space = 0, TAB = 10) : 
+        if (root == None) : 
+            return
+        space += TAB
+
+        self.print2D_node(root.right_child, space)
+
+        print("\n", " " * (space - TAB), root.data)  
+
+        self.print2D_node(root.left_child, space) 
 
 def nodes():
     n1 = Node("root node")
@@ -157,26 +144,6 @@ def nodes():
     while current:
         print(current.data)
         current = current.left_child
-
-def getVerticalOrder(root, hd, m):
-    if root is None:
-        return
-    try:
-        m[hd].append(root.data)
-    except:
-        m[hd] = [root.data]
-    getVerticalOrder(root.left_child, hd-1, m)
-    getVerticalOrder(root.right_child, hd+1, m)
- 
-
-def printVerticalOrder(root):
-    m = dict()
-    hd = 0
-    getVerticalOrder(root, hd, m)
-    for index, value in enumerate(sorted(m)):
-        for i in m[value]:
-            print (i, end=' ')
-        print()
 
 def trees_example_1():
     t = Tree()
@@ -207,9 +174,8 @@ def trees_example_2():
     print ('postorder')
     t.postorder(t.root_node)
     print ('---')
-    printVerticalOrder(t.root_node)
     print ('---')
-    print2DUtil(t.root_node)
+    t.print2D()
 
 def main():
     nodes()
