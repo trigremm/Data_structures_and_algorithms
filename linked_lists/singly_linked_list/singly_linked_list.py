@@ -1,36 +1,34 @@
+'''
+single linked list implementation using Node 
+
+author: askhat molkenov 
+created: 20210210
+edited: 20210317
+'''
+
 class Node:
     def __init__(self, data=None, next=None):
         self.data = data
         self.next = next
 
-    def get_data(self):
-        return self.data
-
-    def get_next(self):
-        return self.next
-
-    def set_next(self, next):
-        self.next = next
-
 class LL: # Linked List
     def __init__(self, data=None):
+        self.head = None
         if data:
             self.head = Node(data)
-        else:
-            self.head = None
 
-    def size(self):
+    def len(self):
         n, c = self.head, 0 
         while n:
-            n, c = n.get_next(), c+1
+            n, c = n.next, c+1
         return c
 
     def search(self, data):
         n, c = self.head, 0
         while n:
-            if n.get_data() == data:
+            if n.data == data:
                 return c
-            n, c = n.get_next(), c+1
+            n, c = n.next, c+1
         return -1
 
     def print(self): # traversing
@@ -40,34 +38,32 @@ class LL: # Linked List
         print('+++ SLL +++')
         n = self.head
         while n != None:
-            print(n.get_data(), end=' ')
-            n = n.get_next()
-        print('\n')
+            print(n.data, end=' -> ')
+            n = n.next
+        print('NULL\n')
 
     def insert_at_beginig(self, data):
         new = Node(data)
-        new.set_next(self.head) # even if head is None it is Ok
+        new.next = self.head # even if head is None it is Ok
         self.head = new
-        return
+
+    def insert_at_end(self, data):
+        new = Node(data)
+        node = self.head
+        while node.next != None:
+            node = node.next
+        node.next = new
 
     def insert_at_middle(self, pos, data):
         node, i = self.head, 0
         while i != pos - 1: 
-            node, i = node.get_next(), i+1
+            node, i = node.next, i+1
         new = Node(data)
-        new.set_next(node.get_next())
-        node.set_next(new)
-        return
-
-    def insert_at_end(self, data):
-        node = self.head
-        while node.get_next() != None:
-            node = node.get_next()
-        new = Node(data)
-        node.set_next(new)
+        new.next = node.next
+        node.next = new
 
     def insert(self, pos, data):
-        size = self.size()
+        size = self.len()
         if pos < 0 or pos > size:
             return None
         if pos == 0:
@@ -78,22 +74,22 @@ class LL: # Linked List
             self.insert_at_middle(pos, data)
             
     def delete_from_begining(self):
-        self.head = self.head.get_next()
+        self.head = self.head.next
 
     def delete_from_end(self):
         previous, current = self.head, self.head
-        while current.get_next() != None:
-            previous, current = current, current.get_next()
-        previous.set_next(None)
+        while current.next != None:
+            previous, current = current, current.next
+        previous.next = None
 
     def delete_from_middle(self, pos):
         previous, current, i = self.head, self.head, 0
         while i != pos - 1:
-            previous, current, i = current, current.get_next(), i+1
-        previous.set_next(current.get_next())
+            previous, current, i = current, current.next, i+1
+        previous.next = current.next
 
     def delete(self, pos):
-        size = self.size()
+        size = self.len()
         if pos < 0 or pos > size or size == 0:
             return None
         if pos == 0:
@@ -119,7 +115,7 @@ def insert_into_ll(ll):
     ll.print()
 
     d = 333
-    p = ll.size() ; 
+    p = ll.len() ; 
     print (f'insert data {d} into pos {p} # end');
     ll.insert(p, d)
     ll.print()
@@ -138,7 +134,7 @@ def deletion_from_ll(ll):
     ll.print ()
 
     print ('delete last')
-    ll.delete(ll.size())
+    ll.delete(ll.len())
     ll.print ()
 
     print ('delete 2nd')
@@ -166,7 +162,7 @@ def search_in_ll(ll):
 
 def over_deletion(ll):
     print ('delete 0th n times')
-    for _ in range(ll.size() + 3):
+    for _ in range(ll.len() + 3):
         ll.print()
         ll.delete(0)
     return ll
