@@ -25,7 +25,7 @@ class CLL:
         while node.next != self.head:
             node = node.next
             print(node.data, end=' -> ')
-        print ('NULL\n')
+        print ('back_to_head\n')
     
     def insert_into_tail(self, data):
         new = Node(data)
