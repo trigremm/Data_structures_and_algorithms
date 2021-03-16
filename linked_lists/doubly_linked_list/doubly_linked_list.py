@@ -4,99 +4,88 @@ class Node:
         self.prev = prev
         self.next = next
 
-    def get_data(self):
-        return self.data
-
-    def get_prev(self):
-        return self.prev
-
-    def set_prev(self, prev):
-        self.prev = prev
-
-    def get_next(self):
-        return self.next
-
-    def set_next(self, next):
-        self.next = next
-
 class DLL:
-    def __init__(self, data=None):
-        self.head = self.tail = Node(data)
+    def __init__(self, data = None):
+        self.head = self.tail = None
+        if data:
+            self.insert_to_head(data)
 
     def len(self):
         if self.head == None:
             return 0
         n, c = self.head, 0 
         while n:
-            n, c = n.get_next(), c+1
+            n, c = n.next, c+1
         return c
 
     def search(self, data):
         n, c = self.head, 0
         while n:
-            if n.get_data() == data:
+            if n.data == data:
                 return c
-            n, c = n.get_next(), c+1
+            n, c = n.next, c+1
         return -1
 
     def print(self): # traversing
         print('--- DLL ---')
         n = self.head
         while n != None:
-            print (n.get_data(), end= ' ')
-            n = n.get_next()
-        print()
+            print (n.data, end=' <=> ')
+            n = n.next
+        print('NULL\n')
         
     def insert_to_head(self, data):
-        if (self.head == None):
-            self.head = self.tail = Node(data)
+        new = Node(data)
+        if self.head == None:
+            self.head = self.tail = new
         else:
-            node = Node(data)
-            node.set_next(self.head)
-            self.head.set_prev(node)
-            self.head = node
+            new.next = self.head
+            self.head.prev = new
+            self.head = new
         
     def insert_to_tail(self, data):
-        node = Node(data)
-        self.tail.set_next(node)
-        node.set_prev(self.tail)
-        self.tail = node
+        new = Node(data)
+        self.tail.next = new
+        new.prev = self.tail
+        self.tail = new
 
     def insert(self, pos, data):
-        if not (pos >=0 and pos <= self.len()):
+        if pos < 0 or pos > self.len():
             return None
         if pos == 0:
             self.insert_to_head(data)
         elif pos == self.len():
             self.insert_to_tail(data)
         else:
+            new = Node(data)
             n, p = self.head, 0
             while n and p < pos:
-                n, p = n.get_next(), p+1
-            node = Node(data)
-            m = n.get_prev()
-            m.set_next(node)
-            node.set_prev(m)
-            node.set_next(n)
-            n.set_prev(node)
+                n, p = n.next, p+1
+            m = n.prev
+            m.next = new
+            new.prev = m
+            new.next = n
+            n.prev = new
 
     def delete_head(self):
-        if self.head.get_next() != None:
-            next = self.head.get_next()
-            next.set_prev(None)
-            self.head.set_next(None)
+        if self.head == None:
+            return 
+        if self.head.next != None:
+            next = self.head.next
+            next.prev = None
+            self.head.next = None
             self.head = next
         else:
             self.head = self.tail = None
 
     def delete_tail(self):
-        prev = self.tail.get_prev()
-        self.tail.set_prev(None)
-        prev.set_next(None)
+        prev = self.tail.prev
+        self.tail.prev = None
+        prev.next = None
         self.tail = prev
         
     def delete(self, pos):
-        if not (pos >=0 and pos <= self.len()-1):
+        if pos < 0 and pos >= self.len():
             return None
         if pos == 0:
             self.delete_head()
@@ -105,17 +94,16 @@ class DLL:
         else:
             n, p = self.head, 0
             while n and p < pos:
-                n, p = n.get_next(), p+1
-            m, o = n.get_prev(), n.get_next()
-            m.set_next(o)
-            o.set_prev(m)
+                n, p = n.next, p+1
+            m, o = n.prev, n.next
+            m.next = o
+            o.prev = m
             
     def delete_value(self, value):
         while self.search(value) != -1: # doing search twice
             pos = self.search(value)    # doing search twice 
             self.delete(pos)
             
-
 def init():
     print ('### init ###')
     
@@ -126,13 +114,6 @@ def init():
     
     ll.print()
     return ll
-
-def get_node(ll):
-    print ('### get_node ###')
-    ll.print()
-    n = 0; print (ll.get_node(n).get_data())
-    n = 2; print (ll.get_node(n).get_data())
-    n = ll.len(); print (ll.get_node(n).get_data())
 
 def insertion(ll):
     print ('### insertion ###');ll.print()
@@ -199,5 +180,6 @@ def main():
 
     ll = insert_into_empty_ll(ll)
 
-main()
-# done
+if __name__ == '__main__':
+    main()
+    # done
