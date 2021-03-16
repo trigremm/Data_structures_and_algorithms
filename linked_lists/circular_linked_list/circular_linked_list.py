@@ -1,24 +1,19 @@
+'''
+circular linked list implementation using Node 
+
+author: askhat molkenov 
+created: 20210219
+edited: 20210316
+'''
+
 class Node:
     def __init__(self, data=None, next=None):
         self.data = data
         self.next = next
-
-    def get_data(self):
-        return self.data
-
-    def get_next(self):
-        return self.next
-
-    def set_next(self, next):
-        self.next = next   
     
 class CLL:
-    def __init__(self, data=None):
-        if data:
-            self.head = Node(data)
-            self.head.set_next(self.head)
-        else:
-            self.head = None
+    def __init__(self):
+        self.head = None
     
     def print(self): 
         node = self.head
@@ -26,65 +21,63 @@ class CLL:
             print ('=== CLL is empty ===')
             return 
         print ('=== CLL ===')
-        print(node.get_data(), end=' ') 
-        node = node.get_next()
-        while node != self.head:
-            print(node.get_data(), end=' ')
-            node = node.get_next()
-        print ()
+        print(node.data, end=' -> ') 
+        while node.next != self.head:
+            node = node.next
+            print(node.data, end=' -> ')
+        print ('NULL\n')
     
     def insert_into_tail(self, data):
-        node = self.head
         new = Node(data)
         if self.head == None:
             self.head = new
-            self.head.set_next(new)
+            self.head.next = new
             return
-        while node.get_next() !=self.head: 
-            node = node.get_next()
-        node.set_next(new)
-        new.set_next(self.head)
+        node = self.head
+        while node.next != self.head: 
+            node = node.next
+        node.next = new
+        new.next = self.head
 
     def insert_into_head(self, data):
-        node = self.head
         new = Node(data)
-        if node == None:
+        if self.head == None:
             self.head = new
-            self.head.set_next(new)
-            return 
-        new.set_next(node)
-        while node.get_next() !=self.head: 
-            node = node.get_next()
+            self.head.next = new
+            return
+        node = self.head
+        new.next = node
+        while node.next != self.head: 
+            node = node.next
         self.head = new
-        node.set_next(self.head)
+        node.next = self.head
 
     def delete_from_tail(self):
         if self.head == None: 
             print ('--- CLL is empty ---')
             return
-        if self.head == self.head.get_next():
+        if self.head == self.head.next:
             self.head = None
             return
         previous = self.head
         current = self.head
-        while current.get_next() != self.head: 
-            previous = current;
-            current = current.get_next()
-        previous.set_next(self.head) 
+        while current.next != self.head: 
+            previous, current = current, current.next
+        previous.next = self.head 
 
     def delete_from_head(self):
         if self.head == None: 
             print ('--- CLL is empty ---')
             return 
-        if self.head == self.head.get_next():
+        if self.head == self.head.next:
             self.head = None
             return
-        second = self.head.get_next()
+        second = self.head.next
         current = self.head
-        while current.get_next() != self.head: 
-            current = current.get_next()
+        while current.next != self.head: 
+            current = current.next
         self.head = second
-        current.set_next(self.head)
+        current.next = self.head
 
 def try_to_insert_to_tail(cll):
     print ('--- try_to_insert_to_tail ---')
@@ -104,8 +97,8 @@ def check_if_it_circluar(cll):
     print ('--- check_if_it_circluar ---')
     node = cll.head
     for _ in range(30):
-        print (node.get_data(), end=' ')
-        node = node.get_next()
+        print (node.data, end=' ')
+        node = node.next
     print()
     return cll
 
