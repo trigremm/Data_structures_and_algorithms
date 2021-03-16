@@ -12,9 +12,11 @@ class Node:
         self.next = next
     
 class CLL:
-    def __init__(self):
+    def __init__(self, data=None):
         self.head = None
-    
+        if data:
+            self.insert_into_head(data)
+            
     def print(self): 
         node = self.head
         if node == None:
