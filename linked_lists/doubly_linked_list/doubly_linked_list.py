@@ -1,3 +1,11 @@
+'''
+doubly linked list implementation using Node 
+
+author: askhat molkenov 
+created: 20210217
+edited: 20210317
+'''
+
 class Node:
     def __init__(self, data=None, next=None, prev=None):
         self.data = data
@@ -33,7 +41,17 @@ class DLL:
             print (n.data, end=' <=> ')
             n = n.next
         print('NULL\n')
-        
+
+    def insert(self, pos, data):
+        if pos < 0 or pos > self.len():
+            return None
+        elif pos == 0:
+            self.insert_to_head(data)
+        elif pos == self.len():
+            self.insert_to_tail(data)
+        else:
+            self.insert_into_middle(pos, data)
+
     def insert_to_head(self, data):
         new = Node(data)
         if self.head == None:
@@ -49,41 +67,17 @@ class DLL:
         new.prev = self.tail
         self.tail = new
 
-    def insert(self, pos, data):
-        if pos < 0 or pos > self.len():
-            return None
-        if pos == 0:
-            self.insert_to_head(data)
-        elif pos == self.len():
-            self.insert_to_tail(data)
-        else:
-            new = Node(data)
-            n, p = self.head, 0
-            while n and p < pos:
-                n, p = n.next, p+1
-            m = n.prev
-            m.next = new
-            new.prev = m
-            new.next = n
-            n.prev = new
+    def insert_into_middle(self, pos, data):
+        new = Node(data)
+        n, p = self.head, 0
+        while n and p < pos:
+            n, p = n.next, p+1
+        m = n.prev
+        m.next = new
+        new.prev = m
+        new.next = n
+        n.prev = new
 
-    def delete_head(self):
-        if self.head == None:
-            return 
-        if self.head.next != None:
-            next = self.head.next
-            next.prev = None
-            self.head.next = None
-            self.head = next
-        else:
-            self.head = self.tail = None
-
-    def delete_tail(self):
-        prev = self.tail.prev
-        self.tail.prev = None
-        prev.next = None
-        self.tail = prev
-        
     def delete(self, pos):
         if pos < 0 and pos >= self.len():
             return None
@@ -92,12 +86,32 @@ class DLL:
         elif pos == self.len()-1:
             self.delete_tail()
         else:
-            n, p = self.head, 0
-            while n and p < pos:
-                n, p = n.next, p+1
-            m, o = n.prev, n.next
-            m.next = o
-            o.prev = m
+            self.delete_pos(pos)
+            
+    def delete_head(self):
+        if self.head == None: # 0
+            return
+        elif self.head.next == None: # 1
+            self.head = self.tail = None
+        else: # more than 1
+            next = self.head.next
+            next.prev = None
+            self.head.next = None
+            self.head = next
+
+    def delete_tail(self):
+        prev = self.tail.prev
+        self.tail.prev = None
+        prev.next = None
+        self.tail = prev
+        
+    def delete_pos(self, pos):
+        n, p = self.head, 0
+        while n and p < pos:
+            n, p = n.next, p+1
+        m, o = n.prev, n.next
+        m.next = o
+        o.prev = m
             
     def delete_value(self, value):
         while self.search(value) != -1: # doing search twice
