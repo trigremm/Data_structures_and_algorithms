@@ -6,6 +6,7 @@ class Node:
 
 class Node_Queue:
   def __init__(self):
+    self.name = 'Node_Queue'
     self.head = None
     self.tail = None
     self.count = 0
@@ -57,6 +58,7 @@ def main():
   queue.enqueue(5)
   queue.enqueue(6)    
   queue.print()
+  print (queue.name)
 
 
 if __name__ == '__main__':
