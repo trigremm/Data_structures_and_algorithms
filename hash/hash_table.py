@@ -3,8 +3,9 @@ class HashItem:
         self.key = key
         self.value = value
 
-class HashTable:
+class Hash_Table:
     def __init__(self):
+        self.name = 'Hash_Table'
         self.size = 256
         self.slots = [None for i in range(self.size)]
         self.count = 0
@@ -36,20 +37,24 @@ class HashTable:
         while self.slots[h] is not None:
             if self.slots[h].key is key:
                 return self.slots[h].value
-            h = (h+ 1) % self.size
+            h = (h + 1) % self.size
         
         return None
 
-ht = HashTable()
-ht.put("good", "eggs")
-ht.put("better", "ham")
-ht.put("best", "spam")
-ht.put("ad", "do not")
-ht.put("ga", "collide")
+def example_1():
+    ht = Hash_Table()
+    ht.put("good", "eggs")
+    ht.put("better", "ham")
+    ht.put("best", "spam")
+    ht.put("ad", "do not")
+    ht.put("ga", "collide")
 
-for key in ("good", "better", "best", "worst", "ad", "ga"):
-    v = ht.get(key)
-    print(v)
+    for key in ("good", "better", "best", "worst", "ad", "ga"):
+        v = ht.get(key)
+        print(v)
+
+if __name__ == '__main__':
+    example_1()
 
 
 
