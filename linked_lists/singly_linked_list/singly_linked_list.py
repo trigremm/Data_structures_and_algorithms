@@ -11,8 +11,9 @@ class Node:
         self.data = data
         self.next = next
 
-class LL: # Linked List
+class Singly_Linked_List:
     def __init__(self, data=None):
+        self.name = 'Singly_Linked_List'
         self.head = None
         if data:
             self.head = Node(data)
@@ -49,6 +50,9 @@ class LL: # Linked List
 
     def insert_at_end(self, data):
         new = Node(data)
+        if self.head == None:
+            self.head = new
+            return
         node = self.head
         while node.next != None:
             node = node.next
@@ -83,7 +87,7 @@ class LL: # Linked List
         previous.next = None
 
     def delete_from_middle(self, pos):
-        previous, current, i = self.head, self.head, 0
+        previous, current, i = self.head, self.head, -1
         while i != pos - 1:
             previous, current, i = current, current.next, i+1
         previous.next = current.next
@@ -176,7 +180,7 @@ def insert_into_empty_ll(ll):
     ll.print ()
 
 def main():
-    ll = LL()
+    ll = Singly_Linked_List()
 
     insert_into_ll(ll)
     deletion_from_ll(ll)
@@ -184,4 +188,5 @@ def main():
     over_deletion(ll)
     insert_into_empty_ll(ll)
 
-main()
+if __name__ == '__main__':
+    main()
