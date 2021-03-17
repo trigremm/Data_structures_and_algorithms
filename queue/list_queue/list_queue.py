@@ -1,5 +1,6 @@
 class List_Queue:
     def __init__(self):
+        self.name = 'List_Queue'
         self.items = []
         self.size = 0
 
@@ -19,9 +20,9 @@ class List_Queue:
             print (i, end=' ')
         print('\n')
 
-
 def main():
     queue = List_Queue()
+    print ('name:', queue.name)
     queue.enqueue(1)
     queue.enqueue(2)
     queue.enqueue(3)
