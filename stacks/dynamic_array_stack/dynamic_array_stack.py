@@ -1,5 +1,6 @@
-class Stack(object):
+class Dynamic_Array_Stack:
     def __init__(self, limit = 10):
+        self.name = 'Dynamic_Array_Stack'
         self.stack = limit*[None]
         self.limit = limit
         self.index = 0
@@ -45,7 +46,7 @@ class Stack(object):
         print('true_print:', self.stack)        
 
 def main():
-    my_stack = Stack(5)
+    my_stack = Dynamic_Array_Stack(5)
     print('peek', my_stack.peek())
     print('pop', my_stack.pop())
     my_stack.push('111')
