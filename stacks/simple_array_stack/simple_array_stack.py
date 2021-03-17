@@ -1,5 +1,6 @@
-class Stack:
+class Simple_Array_Stack:
     def __init__(self, limit = 10):
+        self.name = 'Simple_Array_Stack'
         self.stack = []
         self.limit = limit
     
@@ -33,7 +34,7 @@ class Stack:
         return len(self.stack)
 
 def main():
-    my_stack = Stack(5)
+    my_stack = Simple_Array_Stack(5)
     print('peek', my_stack.peek())
     print('pop', my_stack.pop())
     my_stack.push('111')
