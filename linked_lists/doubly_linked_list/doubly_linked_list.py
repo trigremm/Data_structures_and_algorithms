@@ -12,11 +12,12 @@ class Node:
         self.prev = prev
         self.next = next
 
-class DLL:
+class Doubly_Linked_List:
     def __init__(self, data = None):
+        self.name = 'Doubly_Linked_List'
         self.head = self.tail = None
         if data:
-            self.insert_to_head(data)
+            self.insert_into_head(data)
 
     def len(self):
         if self.head == None:
@@ -46,13 +47,13 @@ class DLL:
         if pos < 0 or pos > self.len():
             return None
         elif pos == 0:
-            self.insert_to_head(data)
+            self.insert_into_head(data)
         elif pos == self.len():
-            self.insert_to_tail(data)
+            self.insert_into_tail(data)
         else:
             self.insert_into_middle(pos, data)
 
-    def insert_to_head(self, data):
+    def insert_into_head(self, data):
         new = Node(data)
         if self.head == None:
             self.head = self.tail = new
@@ -61,11 +62,14 @@ class DLL:
             self.head.prev = new
             self.head = new
         
-    def insert_to_tail(self, data):
+    def insert_into_tail(self, data):
         new = Node(data)
-        self.tail.next = new
-        new.prev = self.tail
-        self.tail = new
+        if self.head == None:
+            self.head = self.tail = new
+        else:
+            self.tail.next = new
+            new.prev = self.tail
+            self.tail = new
 
     def insert_into_middle(self, pos, data):
         new = Node(data)
@@ -121,7 +125,7 @@ class DLL:
 def init():
     print ('### init ###')
     
-    ll = DLL(5)
+    ll = Doubly_Linked_List(5)
     for i in range(1, 4):
         j = (i+1)*5
         ll.insert(pos=i,data=j)
