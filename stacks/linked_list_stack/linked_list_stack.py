@@ -3,8 +3,9 @@ class Node:
         self.data = data
         self.next = next
 
-class Stack:
+class Linked_List_Stack:
     def __init__(self, data = None):
+        self.name = 'Linked_List_Stack'
         self.head = None
         if data:
             self.push(data)
@@ -29,7 +30,7 @@ class Stack:
         return data
 
 def main():
-    my_stack = Stack()
+    my_stack = Linked_List_Stack()
     print('peek', my_stack.peek())
     print('pop', my_stack.pop())
     my_stack.push('111')
