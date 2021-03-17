@@ -11,8 +11,9 @@ class Node:
         self.data = data
         self.next = next
     
-class CLL:
+class Circular_Linked_List:
     def __init__(self, data=None):
+        self.name = 'Circular_Linked_List'
         self.head = None
         if data:
             self.insert_into_head(data)
@@ -133,7 +134,8 @@ def overdelete_from_tail(cll):
     return cll
 
 def main():
-    cll = CLL()
+    cll = Circular_Linked_List()
+    print ('name:', cll.name)
     cll.print()
     cll = try_to_insert_to_tail(cll)
     cll = try_to_insert_to_head(cll)
