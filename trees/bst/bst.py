@@ -21,8 +21,9 @@ class Node:
     def get_left(self): return self._left_child
     def set_left(self, node): self._left_child = node
 
-class Tree:
+class Binary_Search_Tree:
     def __init__(self, data=None):
+        self.name = 'Binary_Search_Tree'
         self.root_node = None
         if data:
             self.insert(data)
@@ -158,12 +159,12 @@ def nodes():
     n1.set_right(n3)
     n2.set_left(n4)
     
-    t = Tree()
-    t.root_node = n1
+    t = Binary_Search_Tree()
+    t.root_node = n1 # not good to access element directly, better create setter 
     t.print()
 
 def trees_example_1():
-    t = Tree()
+    t = Binary_Search_Tree()
     t.insert(10)
     t.insert(5)
     t.insert(20)
@@ -176,9 +177,8 @@ def trees_example_1():
     t.remove(30)
     t.print()
 
-    if True:
-        t.remove(20)
-        t.print()
+    t.remove(20)
+    t.print()
 
     t.remove(5)
     t.print()
@@ -188,7 +188,7 @@ def trees_example_1():
     
 
 def trees_example_2():
-    t = Tree()
+    t = Binary_Search_Tree()
     for _ in range(10):
         r = randint(1, 100)
         t.insert(r)
@@ -196,7 +196,7 @@ def trees_example_2():
 
 def trees_example_3():
     print ('--- trees_example_3 ---')
-    t = Tree()
+    t = Binary_Search_Tree()
     for data in [50,70,30,80,60, 40,20, 85,75,65,55,45,35,25,15]:
         t.insert(data)
     t.print()
