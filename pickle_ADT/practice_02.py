@@ -1,6 +1,6 @@
 """
-import ADT.Singly_Linked_List.pickle 
-and count sum of all elements
+import ADT.Doubly_Linked_List.pickle 
+and count sum of squares all elements
 """
 
 import os
@@ -26,4 +26,5 @@ while node != None:
     node = node.next
 print (s)
 
+# task : Find distance from max to min values in DLL
 
