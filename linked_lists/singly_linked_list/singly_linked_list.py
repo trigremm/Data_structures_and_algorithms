@@ -6,17 +6,61 @@ created: 20210210
 edited: 20210317
 '''
 
+from random import randint
+
 class Node:
     def __init__(self, data=None, next=None):
-        self.data = data
-        self.next = next
+        self._data = data
+        self._next = next
+
+    @property
+    def data(self):
+        return self._data
+
+    @property
+    def next(self):
+        return self._next   
+
+    @next.setter
+    def next(self, next):
+        self._next = next
 
 class Singly_Linked_List:
     def __init__(self, data=None):
         self.name = 'Singly_Linked_List'
         self.head = None
         if data:
-            self.head = Node(data)
+            self.insert_at_head(data)
+
+    def insert_at_head(self, data):
+        new = Node(data)
+        new.next = self.head # even if head is None it is Ok
+        self.head = new
+
+    def insert_at_tail(self, data):
+        new = Node(data)
+        if self.head == None:
+            self.head = new
+            return
+        node = self.head
+        while node.next != None:
+            node = node.next
+        node.next = new
+
+    def insert_at_pos(self, pos, data):
+        length = self.len()
+        if pos < 0 or pos > length:
+            return None
+        elif pos == 0:
+            return self.insert_at_head(data)
+        elif pos == length:
+            return self.insert_at_tail(data)
+        new = Node(data)
+        node, p = self.head, 0
+        while node and p != pos - 1:
+            node, p = node.next, p+1
+        new.next = node.next
+        node.next = new
 
     def len(self):
         n, c = self.head, 0 
@@ -34,159 +78,138 @@ class Singly_Linked_List:
 
     def print(self): # traversing
         if self.head == None:
-            print('+++ SLL is empty +++')
-            return
-        print('+++ SLL +++')
+            return print('SLL: empty\n')
+        print('SLL: ', end='')
         n = self.head
         while n != None:
-            print(n.data, end=' -> ')
+            print(n.data, end=' -> ' if n.next else '\n\n')
             n = n.next
-        print('NULL\n')
 
-    def insert_at_beginig(self, data):
-        new = Node(data)
-        new.next = self.head # even if head is None it is Ok
-        self.head = new
+    def delete_head(self):
+        if self.head:
+            self.head = self.head.next
 
-    def insert_at_end(self, data):
-        new = Node(data)
-        if self.head == None:
-            self.head = new
-            return
-        node = self.head
-        while node.next != None:
-            node = node.next
-        node.next = new
-
-    def insert_at_middle(self, pos, data):
-        node, i = self.head, 0
-        while i != pos - 1: 
-            node, i = node.next, i+1
-        new = Node(data)
-        new.next = node.next
-        node.next = new
-
-    def insert(self, pos, data):
-        size = self.len()
-        if pos < 0 or pos > size:
-            return None
-        if pos == 0:
-            self.insert_at_beginig(data)
-        elif pos == size:
-            self.insert_at_end(data)
-        else:
-            self.insert_at_middle(pos, data)
-            
-    def delete_from_begining(self):
-        self.head = self.head.next
-
-    def delete_from_end(self):
+    def delete_tail(self):
+        length = self.len()
+        if length <= 1:
+            self.head = None
+            return 
         previous, current = self.head, self.head
         while current.next != None:
             previous, current = current, current.next
         previous.next = None
 
-    def delete_from_middle(self, pos):
+    def delete_pos(self, pos):
+        length = self.len()
+        if pos < 0 or pos >= length:
+            return None
+        if pos == 0:
+            return self.delete_head()
+        if pos == length - 1:
+            return self.delete_tail()
         previous, current, i = self.head, self.head, -1
         while i != pos - 1:
             previous, current, i = current, current.next, i+1
         previous.next = current.next
 
-    def delete(self, pos):
-        size = self.len()
-        if pos < 0 or pos > size or size == 0:
-            return None
-        if pos == 0:
-            self.delete_from_begining()
-        elif pos == size:
-            self.delete_from_end()
-        else:
-            self.delete_from_middle(pos)
-            
-def insert_into_ll(ll):
+def example_insert_at_head():
+    print(' +++ example_insert_at_head +++ ')
+    ll = Singly_Linked_List()
     ll.print()
 
-    d = 111
-    p = 1
-    print (f'insert data {d} into pos {p} # no change, ll empty, ')
-    ll.insert(p, d); 
-    ll.print()
-    
-    d = 222
-    p = 0
-    print (f'insert data {d} into pos {p} # begining')
-    ll.insert(p, d)
+    for i in 'head':
+        ll.insert_at_head(i)
+    ll.insert_at_pos(-1, -11)
+    ll.insert_at_pos(44, 44)
     ll.print()
 
-    d = 333
-    p = ll.len() ; 
-    print (f'insert data {d} into pos {p} # end');
-    ll.insert(p, d)
+def example_insert_at_tail():
+    print(' +++ example_insert_at_tail +++ ')
+    ll = Singly_Linked_List()
     ll.print()
-    
-    for p in range(1, 5):
-        d = 10**p
-        print (f'insert data {d} into pos {p} # end');
-        ll.insert(p, d)
-        ll.print()
 
-    return ll
-
-def deletion_from_ll(ll):
-    print ('delete first')
-    ll.delete(0)
-    ll.print ()
-
-    print ('delete last')
-    ll.delete(ll.len())
-    ll.print ()
-
-    print ('delete 2nd')
-    ll.delete(2)
-    ll.print ()
-
-    print ('delete 2nd')
-    ll.delete(2)
-    ll.print ()
-    return ll
-
-def search (n, ll):
-    ans = ll.search(n)
+    for i in 'tail':
+        ll.insert_at_tail(i)
+    ll.insert_at_pos(-1, -11)
+    ll.insert_at_pos(44, 44)
     ll.print()
-    if ans == -1:
-        print (f'{n} not in ll')
-    else:
-        print (f'{n} in ll at pos {ans}')
 
-def search_in_ll(ll):
-    print ('--- search in ')
-    n = 5; search (n, ll)
-    n = 10; search (n, ll)
-    n = 100000; search (n, ll)
+def example_insert_at_pos():
+    print(' +++ example_insert_at_pos +++ ')
+    ll = Singly_Linked_List()
+    ll.print()
 
-def over_deletion(ll):
-    print ('delete 0th n times')
-    for _ in range(ll.len() + 3):
-        ll.print()
-        ll.delete(0)
-    return ll
+    for i in '1234567890':
+        r = randint(0, ll.len())
+        ll.insert_at_pos(r,i)
+    ll.insert_at_pos(-1, -11)
+    ll.insert_at_pos(44, 44)
+    ll.print()
 
-def insert_into_empty_ll(ll):
-    print ('--- insert_into_empty_ll ---')
-    i, j = -2,1
-    for _ in range(5):
-        ll.insert(i,j)
-        i, j = i+1, j*10
+def example_delete_head():
+    print(' --- example_delete_head --- ')
+    ll = Singly_Linked_List()
+    for ch in 'xyz':
+        ll.insert_at_head(ch)
     ll.print ()
+
+    while ll.head:
+        ll.delete_head()
+    ll.print ()
+
+    for ch in 'head':
+        ll.insert_at_tail(ch)
+    ll.print ()
+
+def example_delete_tail():
+    print(' --- example_delete_tail --- ')
+    ll = Singly_Linked_List()
+    for ch in '12345':
+        ll.insert_at_head(ch)
+    ll.print ()
+
+    while ll.head:
+        ll.delete_tail()
+    ll.print ()
+
+    for ch in 'tail':
+        ll.insert_at_tail(ch)
+    ll.print ()
+
+def example_delete_pos():
+    print(' --- example_delete_pos --- ')
+    ll = Singly_Linked_List()
+    for ch in '012345':
+        ll.insert_at_tail(ch)
+    ll.print()
+
+    while ll.head:
+        r = randint(0,ll.len()-1)
+        print ('delete', r)
+        ll.delete_pos(r)
+        ll.print ()
+
+    for ch in 'pos':
+        ll.insert_at_pos(0, ch)
+    ll.print ()
+
+def search():
+    print (' --- search --- ')
+    ll = Singly_Linked_List()
+    for i in '1234567890':
+        ll.insert_at_pos(0,i)
+    print (ll.search('5'))
+    print (ll.search('0'))
+    print (ll.search('a'))
 
 def main():
-    ll = Singly_Linked_List()
-
-    insert_into_ll(ll)
-    deletion_from_ll(ll)
-    search_in_ll(ll)
-    over_deletion(ll)
-    insert_into_empty_ll(ll)
+    example_insert_at_head()
+    example_insert_at_tail()
+    example_insert_at_pos()
+    example_delete_head()
+    example_delete_tail()
+    example_delete_pos()
+    search()
 
 if __name__ == '__main__':
     main()

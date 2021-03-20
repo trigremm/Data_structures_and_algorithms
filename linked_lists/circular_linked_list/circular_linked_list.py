@@ -6,47 +6,37 @@ created: 20210219
 edited: 20210316
 '''
 
+from random import randint
+
 class Node:
     def __init__(self, data=None, next=None):
-        self.data = data
-        self.next = next
+        self._data = data
+        self._next = next
+
+    @property
+    def data(self):
+        return self._data
+
+    @property
+    def next(self):
+        return self._next   
+
+    @next.setter
+    def next(self, next):
+        self._next = next
     
 class Circular_Linked_List:
     def __init__(self, data=None):
         self.name = 'Circular_Linked_List'
         self.head = None
         if data:
-            self.insert_into_head(data)
-            
-    def print(self): 
-        node = self.head
-        if node == None:
-            print ('=== CLL is empty ===')
-            return 
-        print ('=== CLL ===')
-        print(node.data, end=' -> ') 
-        while node.next != self.head:
-            node = node.next
-            print(node.data, end=' -> ')
-        print ('back_to_head\n')
+            self.insert_at_head(data)
     
-    def insert_into_tail(self, data):
+    def insert_at_head(self, data):
         new = Node(data)
         if self.head == None:
-            self.head = new
-            self.head.next = new
-            return
-        node = self.head
-        while node.next != self.head: 
-            node = node.next
-        node.next = new
-        new.next = self.head
-
-    def insert_into_head(self, data):
-        new = Node(data)
-        if self.head == None:
-            self.head = new
-            self.head.next = new
+            self.head = new 
+            new.next = self.head
             return
         node = self.head
         new.next = node
@@ -54,97 +44,105 @@ class Circular_Linked_List:
             node = node.next
         self.head = new
         node.next = self.head
+        
+    def insert_at_tail(self, data):
+        new = Node(data)
+        if self.head == None:
+            return self.insert_at_head(data)
+        node = self.head
+        while node.next != self.head: 
+            node = node.next
+        node.next = new
+        new.next = self.head
+    
+    def len(self):
+        pass # homework
 
-    def delete_from_tail(self):
-        if self.head == None: 
-            print ('--- CLL is empty ---')
-            return
-        if self.head == self.head.next:
-            self.head = None
-            return
-        previous = self.head
-        current = self.head
-        while current.next != self.head: 
-            previous, current = current, current.next
-        previous.next = self.head 
+    def print(self): 
+        node = self.head
+        if node == None:
+            return print ('CLL: empty\n')
+        print ('CLL: ', end = '')
+        print(node.data, end=' -> ')
+        while node.next != self.head:
+            node = node.next
+            print(node.data, end=' -> ')
+        print ('back_to_head\n')
 
-    def delete_from_head(self):
+    def delete_head(self):
         if self.head == None: 
-            print ('--- CLL is empty ---')
             return 
         if self.head == self.head.next:
             self.head = None
             return
-        second = self.head.next
-        current = self.head
+        current, second = self.head, self.head.next
         while current.next != self.head: 
             current = current.next
         self.head = second
         current.next = self.head
 
-def try_to_insert_to_tail(cll):
-    print ('--- try_to_insert_to_tail ---')
-    for i in range(7):
-        cll.insert_into_tail(i)
-    cll.print()
-    return cll
-    
-def try_to_insert_to_head(cll):
-    print ('--- try_to_insert_to_head ---')
-    for i in 'abc':
-        cll.insert_into_head(i)
-    cll.print()
-    return cll
+    def delete_tail(self):
+        if self.head == None: 
+            return
+        if self.head == self.head.next:
+            self.head = None
+            return
+        previous, current = self.head, self.head
+        while current.next != self.head: 
+            previous, current = current, current.next
+        previous.next = self.head 
 
-def check_if_it_circluar(cll):
-    print ('--- check_if_it_circluar ---')
-    node = cll.head
-    for _ in range(30):
-        print (node.data, end=' ')
-        node = node.next
-    print()
-    return cll
+def example_insert_at_head():
+    print(' +++ example_insert_at_head +++ ')
+    ll = Circular_Linked_List()
 
-def try_delete_from_head(cll):
-    print ('--- try_delete_from_head ---')
-    for _ in range(2):
-        cll.delete_from_head()
-        cll.print()
-    return cll
+    for i in 'head':
+        ll.insert_at_head(i)
+    ll.print()
 
-def try_delete_from_tail(cll):
-    print ('--- try_delete_from_tail ---')
-    for _ in range(2):
-        cll.delete_from_tail()
-        cll.print()
-    return cll
+def example_insert_at_tail():
+    print(' +++ example_insert_at_tail +++ ')
+    ll = Circular_Linked_List()
 
-def overdelete_from_head(cll):
-    print ('--- overdelete_from_head ---')
-    for _ in range(10):
-        cll.delete_from_head()
-        cll.print()
-    return cll
+    for i in 'tail':
+        ll.insert_at_tail(i)
+    ll.print()
 
-def overdelete_from_tail(cll):
-    print ('--- overdelete_from_tail ---')
-    for _ in range(10):
-        cll.delete_from_tail()
-        cll.print()
-    return cll
+def example_delete_head():
+    print(' --- example_delete_head --- ')
+    ll = Circular_Linked_List()
+    for ch in 'xyz':
+        ll.insert_at_head(ch)
+    ll.print ()
+
+    while ll.head:
+        ll.delete_head()
+        ll.print ()
+
+    for ch in 'head':
+        ll.insert_at_tail(ch)
+    ll.print ()
+
+def example_delete_tail():
+    print(' --- example_delete_tail --- ')
+    ll = Circular_Linked_List()
+    for ch in '12345':
+        ll.insert_at_head(ch)
+    ll.print ()
+
+    while ll.head:
+        ll.delete_tail()
+        ll.print ()
+
+    for ch in 'tail':
+        ll.insert_at_tail(ch)
+    ll.print ()
 
 def main():
-    cll = Circular_Linked_List()
-    print ('name:', cll.name)
-    cll.print()
-    cll = try_to_insert_to_tail(cll)
-    cll = try_to_insert_to_head(cll)
-    cll = check_if_it_circluar(cll)
-    cll = try_delete_from_head(cll)
-    cll = try_delete_from_tail(cll)
-    cll = overdelete_from_head(cll)
-    cll = try_to_insert_to_head(cll)
-    cll = overdelete_from_tail(cll)
+    example_insert_at_head()
+    example_insert_at_tail()
+    example_delete_head()
+    example_delete_tail()
     
 if __name__ == '__main__':
     main()
