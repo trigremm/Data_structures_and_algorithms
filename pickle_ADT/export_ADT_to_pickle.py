@@ -9,7 +9,9 @@ import os
 import pickle
 import sys
 
-from random import randint
+from random import randint, seed
+
+seed(20210316)
 
 path = os.path.join("linked_lists", "singly_linked_list")
 sys.path.insert(1, path)
