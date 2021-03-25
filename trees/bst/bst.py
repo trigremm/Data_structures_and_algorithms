@@ -10,60 +10,74 @@ from icecream import ic
 from random import randint
 
 class Node:
-    def __init__(self, data):
+    def __init__(self, data=None):
         self._data = data
-        self._right_child = None
-        self._left_child = None
-    
-    def get_data(self): return self._data
-    def get_right(self): return self._right_child
-    def set_right(self, node): self._right_child = node
-    def get_left(self): return self._left_child
-    def set_left(self, node): self._left_child = node
+        self._left = None
+        self._right = None
+
+    @property
+    def data(self):
+        return self._data
+
+    @property
+    def left(self):
+        return self._left   
+
+    @left.setter
+    def left(self, left):
+        self._left = left
+
+    @property
+    def right(self):
+        return self._right   
+
+    @right.setter
+    def right(self, right):
+        self._right = right
 
 class Binary_Search_Tree:
     def __init__(self, data=None):
         self.name = 'Binary_Search_Tree'
-        self.root_node = None
+        self.root = None
         if data:
             self.insert(data)
 
     def find_min(self):
-        current = self.root_node
-        while current.get_left():
-            current = current.get_left()
+        current = self.root
+        while current.left:
+            current = current.left
         return current
 
     def insert(self, data):
         new = Node(data)
-        if self.root_node is None:
-            self.root_node = new
+        if self.root is None:
+            self.root = new
             return 
-        current, parent = self.root_node, None
+        current, parent = self.root, None
         while True:
             parent = current
-            if data < current.get_data():
-                current = current.get_left()
+            if data < current.data:
+                current = current.left
                 if current is None:
-                    parent.set_left(new)
+                    parent.left = new
                     return
             else: 
-                current = current.get_right()
+                current = current.right
                 if current is None:
-                    parent.set_right(new)
+                    parent.right = new
                     return
     
     def get_node_with_parent(self, data):
-        current, parent = self.root_node, None
+        current, parent = self.root, None
         while True:
             if current is None:
                 return (parent, None)
-            elif current.get_data() == data:
+            elif current.data == data:
                 return (parent, current)
-            elif current.get_data() > data:
-                current, parent = current.get_left(), current
+            elif current.data > data:
+                current, parent = current.left, current
             else:
-                current, parent = current.get_right(), current
+                current, parent = current.right, current
 
     def remove(self, data):
         parent, node = self.get_node_with_parent(data)
@@ -71,58 +85,58 @@ class Binary_Search_Tree:
         if node is None:
             return False
         children_count = 0
-        if node.get_left() and node.get_right():
+        if node.left and node.right:
             children_count = 2
-        elif (node.get_left() is None) and (node.get_right() is None):
+        elif (node.left is None) and (node.right is None):
             children_count = 0
         else:
             children_count = 1
         if children_count == 0:
             if parent:
-                if parent.get_right() is node:
-                    parent.set_right(None)
+                if parent.right is node:
+                    parent.right = None
                 else:
-                    parent.set_left(None)
+                    parent.left = None
             else:
-                self.root_node = None
+                self.root = None
         elif children_count == 1:
-            next_node = node.get_left() if node.get_left() else node.get_right()
+            next_node = node.left if node.left else node.right
             if parent:
-                if parent.get_left() is node:
-                    parent.set_left(next_node)
+                if parent.left is node:
+                    parent.left = next_node
                 else:
-                    parent.set_right(next_node)
+                    parent.right = next_node
         else:
             parent_of_leftmost_node = node
-            leftmost_node = node.get_right()
-            while leftmost_node.get_left():
+            leftmost_node = node.right
+            while leftmost_node.left:
                 parent_of_leftmost_node = leftmost_node
-                leftmost_node = leftmost_node.get_left()
-            node._data = leftmost_node.get_data() # please help me fix this line
-            if parent_of_leftmost_node.get_left() == leftmost_node:
-                parent_of_leftmost_node.set_left(leftmost_node.get_right())
+                leftmost_node = leftmost_node.left
+            node._data = leftmost_node.data # please help me fix this line
+            if parent_of_leftmost_node.left == leftmost_node:
+                parent_of_leftmost_node.left = leftmost_node.right
             else:
-                parent_of_leftmost_node.set_right(leftmost_node.get_right())
+                parent_of_leftmost_node.right = leftmost_node.right
 
-    def preorder(self, root_node):
-        current = root_node
+    def preorder(self, root):
+        current = root
         if current is None:
             return
-        print(current.get_data())
-        self.preorder(current.get_left())
-        self.preorder(current.get_right())
+        print(current.data)
+        self.preorder(current.left)
+        self.preorder(current.right)
     
-    def postorder(self, root_node):
-        current = root_node
+    def postorder(self, root):
+        current = root
         if current is None:
             return
-        self.postorder(current.get_left())
-        self.postorder(current.get_right())
-        print(current.get_data())
+        self.postorder(current.left)
+        self.postorder(current.right)
+        print(current.data)
 
     def print(self):
         print ('-'*40)
-        self.print2D_node(self.root_node)
+        self.print2D_node(self.root)
         print ('-'*40)
 
     def print2D_node(self, root, space = 0, TAB = 10) : 
@@ -130,37 +144,37 @@ class Binary_Search_Tree:
             return
         space += TAB
 
-        self.print2D_node(root.get_right(), space)
+        self.print2D_node(root.right, space)
 
-        print("\n", " " * (space - TAB), root.get_data())  
+        print("\n", " " * (space - TAB), root.data)  
 
-        self.print2D_node(root.get_left(), space) 
+        self.print2D_node(root.left, space) 
 
     def search(self, data):
-        current = self.root_node
+        current = self.root
         while True:
             if current is None:
                 return False
-            elif current.get_data() == data:
+            elif current.data == data:
                 return True
-            elif current.get_data() > data:
-                current = current.get_left()
+            elif current.data > data:
+                current = current.left
             else:
-                current = current.get_right()
+                current = current.right
 
 
 def nodes():
-    n1 = Node("root_node")
+    n1 = Node("root")
     n2 = Node("left_child_node")
     n3 = Node("right_child_node")
     n4 = Node("left_grandchild_node")
 
-    n1.set_left(n2)
-    n1.set_right(n3)
-    n2.set_left(n4)
+    n1.left = n2
+    n1.right = n3
+    n2.left = n4
     
     t = Binary_Search_Tree()
-    t.root_node = n1 # not good to access element directly, better create setter 
+    t.root = n1 # not good to access element directly, better create setter 
     t.print()
 
 def trees_example_1():
@@ -208,7 +222,7 @@ def trees_example_3():
     t.print()
     t.remove(30)
     t.print()   
-    print(t.root_node.get_data())
+    print(t.root.data)
     print ('--- trees_example_3 --- end')
 
 def main():
