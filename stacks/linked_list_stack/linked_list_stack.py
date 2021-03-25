@@ -1,19 +1,7 @@
 class Node:
     def __init__(self, data=None, next=None):
-        self._data = data
-        self._next = next
-
-    @property
-    def data(self):
-        return self._data
-
-    @property
-    def next(self):
-        return self._next   
-
-    @next.setter
-    def next(self, next):
-        self._next = next
+        self.data = data
+        self.next = next
 
 class Linked_List_Stack:
     def __init__(self, data = None):
@@ -24,19 +12,20 @@ class Linked_List_Stack:
     
     def push(self, data = None):
         if data:
-            new = Node(data, self.head)
-            self.head = new
-
+            temp = Node(data, self.head)
+            self.head = temp
     def pop(self):
         if self.head is None:
-            return None
+            print ('[pop] stack underflow!')
+            return 
         data = self.head.data
         self.head = self.head.next
         return data
     
     def peek(self):
         if self.head is None:
-            return None
+            print ('[peek] stack underflow!')
+            return 
         data = self.head.data
         return data
 
