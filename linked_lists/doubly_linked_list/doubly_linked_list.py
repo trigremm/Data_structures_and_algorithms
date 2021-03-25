@@ -6,78 +6,22 @@ created: 20210217
 edited: 20210317
 '''
 
-from random import randint
-
 class Node:
     def __init__(self, data=None, next=None, prev=None):
-        self._data = data
-        self._next = next
-        self._prev = prev
-
-    @property
-    def data(self):
-        return self._data
-
-    @property
-    def next(self):
-        return self._next   
-
-    @next.setter
-    def next(self, next):
-        self._next = next
-
-    @property
-    def prev(self):
-        return self._prev   
-
-    @prev.setter
-    def prev(self, prev):
-        self._prev = prev
+        self.data = data
+        self.prev = prev
+        self.next = next
 
 class Doubly_Linked_List:
     def __init__(self, data = None):
         self.name = 'Doubly_Linked_List'
         self.head = self.tail = None
         if data:
-            self.insert_at_head(data)
-
-    def insert_at_head(self, data):
-        new = Node(data)
-        if self.head == None:
-            self.head = self.tail = new
-        else:
-            new.next = self.head
-            self.head.prev = new
-            self.head = new
-        
-    def insert_at_tail(self, data):
-        new = Node(data)
-        if self.head == None:
-            self.head = self.tail = new
-            return
-        self.tail.next = new
-        new.prev = self.tail
-        self.tail = new
-
-    def insert_at_pos(self, pos, data):
-        length = self.len()
-        if pos < 0 or pos > length:
-            return None
-        elif pos == 0:
-            return self.insert_at_head(data)
-        elif pos == length:
-            return self.insert_at_tail(data)
-        new = Node(data)
-        n, p = self.head, 0
-        while n and p < pos:
-            n, p = n.next, p+1
-        m = n.prev
-        m.next = new
-        new.prev = m
-        new.next = n
-        n.prev = new
+            self.insert_into_head(data)
 
     def len(self):
+        if self.head == None:
+            return 0
         n, c = self.head, 0 
         while n:
             n, c = n.next, c+1
@@ -92,13 +36,61 @@ class Doubly_Linked_List:
         return -1
 
     def print(self): # traversing
-        if self.head == None:
-            return print ('DLL: empty\n')
-        print('DLL: ', end='')
+        print('--- DLL ---')
         n = self.head
         while n != None:
-            print(n.data, end=' <=> ' if n.next else '\n\n')
+            print (n.data, end=' <=> ')
             n = n.next
+        print('NULL\n')
+
+    def insert(self, pos, data):
+        if pos < 0 or pos > self.len():
+            return None
+        elif pos == 0:
+            self.insert_into_head(data)
+        elif pos == self.len():
+            self.insert_into_tail(data)
+        else:
+            self.insert_into_middle(pos, data)
+
+    def insert_into_head(self, data):
+        new = Node(data)
+        if self.head == None:
+            self.head = self.tail = new
+        else:
+            new.next = self.head
+            self.head.prev = new
+            self.head = new
+        
+    def insert_into_tail(self, data):
+        new = Node(data)
+        if self.head == None:
+            self.head = self.tail = new
+        else:
+            self.tail.next = new
+            new.prev = self.tail
+            self.tail = new
+
+    def insert_into_middle(self, pos, data):
+        new = Node(data)
+        n, p = self.head, 0
+        while n and p < pos:
+            n, p = n.next, p+1
+        m = n.prev
+        m.next = new
+        new.prev = m
+        new.next = n
+        n.prev = new
+
+    def delete(self, pos):
+        if pos < 0 and pos >= self.len():
+            return None
+        if pos == 0:
+            self.delete_head()
+        elif pos == self.len()-1:
+            self.delete_tail()
+        else:
+            self.delete_pos(pos)
             
     def delete_head(self):
         if self.head == None: # 0
@@ -112,23 +104,12 @@ class Doubly_Linked_List:
             self.head = next
 
     def delete_tail(self):
-        length = self.len()
-        if length <= 1:
-            self.head = self.tail = None
-            return
         prev = self.tail.prev
         self.tail.prev = None
         prev.next = None
         self.tail = prev
-
+        
     def delete_pos(self, pos):
-        length = self.len()
-        if pos < 0 or pos >= length:
-            return None
-        if pos == 0:
-            return self.delete_head()
-        if pos == length - 1:
-            return self.delete_tail()
         n, p = self.head, 0
         while n and p < pos:
             n, p = n.next, p+1
@@ -139,115 +120,83 @@ class Doubly_Linked_List:
     def delete_value(self, value):
         while self.search(value) != -1: # doing search twice
             pos = self.search(value)    # doing search twice 
-            self.delete_pos(pos)
+            self.delete(pos)
             
-def example_insert_at_head():
-    print(' +++ example_insert_at_head +++ ')
-    ll = Doubly_Linked_List()
+def init():
+    print ('### init ###')
+    
+    ll = Doubly_Linked_List(5)
+    for i in range(1, 4):
+        j = (i+1)*5
+        ll.insert(pos=i,data=j)
+    
     ll.print()
+    return ll
 
-    for i in 'head':
-        ll.insert_at_head(i)
-    ll.insert_at_pos(-1, -11)
-    ll.insert_at_pos(44, 44)
+def insertion(ll):
+    print ('### insertion ###');ll.print()
+
+    d = 26; p = 2; print (f'insert data {d} into pos {p}');
+    ll.insert(p, d); ll.print()
+
+    d = 66; p = 0; print (f'insert data {d} into pos {p}');
+    ll.insert(p, d); ll.print()
+    
+    d = 99; p = ll.len(); print (f'insert data {d} into pos {p}');
+    ll.insert(p, d); ll.print()
+    return ll
+
+def deletion(ll):
+    print ('### deletion ###');ll.print ()
+
+    print ('delete first'); ll.delete(0); ll.print ()
+
+    print ('delete last'); ll.delete(ll.len()-1); ll.print ()
+    
+    print ('delete 3rd'); ll.delete(3); ll.print ()
+
+    return ll
+
+def search (ll):
+    def search_one(n):
+        ans = ll.search(n)
+        if ans == -1:
+            print (f'{n} not in ll')
+        else:
+            print (f'{n} in ll at pos {ans}')
+    
+    print ('### search ###')
     ll.print()
+    n = 5; search_one (n)
+    n = 15; search_one (n)
+    n = 20; search_one (n)
 
-def example_insert_at_tail():
-    print(' +++ example_insert_at_tail +++ ')
-    ll = Doubly_Linked_List()
-    ll.print()
+def over_deletion(ll):
+    print ('delete 0th n times')
+    for _ in range(ll.len() + 1):
+        ll.print()
+        ll.delete(0); print (ll.len())
+    return ll
 
-    for i in 'tail':
-        ll.insert_at_tail(i)
-    ll.insert_at_pos(-1, -11)
-    ll.insert_at_pos(44, 44)
-    ll.print()
-
-def example_insert_at_pos():
-    print(' +++ example_insert_at_pos +++ ')
-    ll = Doubly_Linked_List()
-    ll.print()
-
-    for i in '1234567890':
-        r = randint(0, ll.len())
-        ll.insert_at_pos(r,i)
-    ll.insert_at_pos(-1, -11)
-    ll.insert_at_pos(44, 44)
-    ll.print()
-
-def example_delete_head():
-    print(' --- example_delete_head --- ')
-    ll = Doubly_Linked_List()
-    for ch in 'xyz':
-        ll.insert_at_head(ch)
+def insert_into_empty_ll(ll):
+    i, j = -2,1
+    for _ in range(5):
+        ll.insert(i,j)
+        i, j = i+1, j*10
     ll.print ()
-
-    while ll.head:
-        ll.delete_head()
-    ll.print ()
-
-    for ch in 'head':
-        ll.insert_at_tail(ch)
-    ll.print ()
-
-def example_delete_tail():
-    print(' --- example_delete_tail --- ')
-    ll = Doubly_Linked_List()
-    for ch in '12345':
-        ll.insert_at_head(ch)
-    ll.print ()
-
-    while ll.head:
-        ll.delete_tail()
-    ll.print ()
-
-    for ch in 'tail':
-        ll.insert_at_tail(ch)
-    ll.print ()
-
-def example_delete_pos():
-    print(' --- example_delete_pos --- ')
-    ll = Doubly_Linked_List()
-    for ch in '012345':
-        ll.insert_at_tail(ch)
-    ll.print()
-
-    while ll.head:
-        r = randint(0,ll.len()-1)
-        print ('delete', r)
-        ll.delete_pos(r)
-        ll.print ()
-
-    for ch in 'pos':
-        ll.insert_at_pos(0, ch)
-    ll.print ()
-
-def search():
-    print (' --- search --- ')
-    ll = Doubly_Linked_List()
-    for i in '1234567890':
-        ll.insert_at_pos(0,i)
-    print (ll.search('5'))
-    print (ll.search('0'))
-    print (ll.search('a'))
-
-def delete_value():
-    print (' --- delete_value --- ')
-    ll = Doubly_Linked_List()
-    for i in '112123123412345':
-        ll.insert_at_tail(i)
-    print (ll.delete_value('5')); ll.print()
-    print (ll.delete_value('2')); ll.print()
 
 def main():
-    example_insert_at_head()
-    example_insert_at_tail()
-    example_insert_at_pos()
-    example_delete_head()
-    example_delete_tail()
-    example_delete_pos()
-    search()
-    delete_value()
+    ll = init()
+    
+    ll = insertion(ll)
+
+    ll = deletion(ll)
+
+    search(ll)
+    
+    ll = over_deletion(ll)
+
+    ll = insert_into_empty_ll(ll)
 
 if __name__ == '__main__':
     main()
