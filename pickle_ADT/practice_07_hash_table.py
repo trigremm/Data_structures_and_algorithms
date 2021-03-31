@@ -40,7 +40,20 @@ def count_odd_values(sll):
         node = node.next
     print ('number of odd values in the sll:', c)
 
+def count_num_of_indexes(ht):
+    _ = '\n\nfunction that counts number of obtained cells in ht'
+    print (_)
+    pass
+
+def get_size_of_ht(ht):
+    _ = '\n\nfunction to return size of ht'
+    print (_)
+    pass
+
+
 if __name__ == '__main__':
     get_name_and_print(data)
     inspect(data)
+    count_num_of_indexes(data)
+    get_size_of_ht(data)
     
